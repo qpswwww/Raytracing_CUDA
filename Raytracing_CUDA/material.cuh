@@ -4,17 +4,11 @@
 #include "hittable.cuh"
 #include "random.cuh"
 
-class material {
-public:
-	virtual bool scatter(const ray& r_in, const hit_record& rec, vec3& attenuation,
-		ray& scattered) const = 0;
-};
-
 class lambertian : public material {
 public:
-	lambertian(const vec3& a) : albedo(a) {}
-	virtual bool scatter(const ray& r_in, const hit_record& rec,
-		vec3& attenuation, ray& scattered, curandState *pixel_random_seed) const {
+	__device__ lambertian(const vec3& a) : albedo(a) {}
+	__device__ virtual bool scatter(const ray& r_in, const hit_record& rec,
+		vec3& attenuation, ray& scattered,curandState *pixel_random_seed) const {
 		vec3 target = rec.p + rec.normal + random_in_unit_sphere(pixel_random_seed);
 		scattered = ray(rec.p, target - rec.p);
 		attenuation = albedo;
@@ -26,10 +20,10 @@ public:
 
 class metal : public material {
 public:
-	metal(const vec3& a, float f) : albedo(a) {
+	__device__ metal(const vec3& a, float f) : albedo(a) {
 		if (f < 1) fuzz = f; else fuzz = 1;
 	}
-	virtual bool scatter(const ray& r_in, const hit_record& rec,
+	__device__ virtual bool scatter(const ray& r_in, const hit_record& rec,
 		vec3& attenuation, ray& scattered, curandState *pixel_random_seed) const {
 		vec3 reflected = reflect(unit_vector(r_in.direction()), rec.normal);
 		scattered = ray(rec.p, reflected + fuzz * random_in_unit_sphere(pixel_random_seed));
@@ -42,8 +36,8 @@ public:
 
 class dielectric : public material {
 public:
-	dielectric(float ri) : ref_idx(ri) {}
-	virtual bool scatter(const ray& r_in, const hit_record& rec,
+	__device__ dielectric(float ri) : ref_idx(ri) {}
+	__device__ virtual bool scatter(const ray& r_in, const hit_record& rec,
 		vec3& attenuation, ray& scattered, curandState *pixel_random_seed) const {
 		vec3 outward_normal;
 		vec3 reflected = reflect(r_in.direction(), rec.normal);

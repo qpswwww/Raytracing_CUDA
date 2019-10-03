@@ -13,6 +13,7 @@ void check_cuda(cudaError_t result, char const *const func, const char *const fi
 		std::cerr << "CUDA error = " << static_cast<unsigned int>(result) << " at " <<
 			file << ":" << line << " '" << func << "' \n";
 		// Make sure we call CUDA Device Reset before exiting
+		std::cerr << cudaGetErrorString((cudaError_t)(static_cast<unsigned int>(result)))<<std::endl;
 		cudaDeviceReset();
 		exit(99);
 	}
