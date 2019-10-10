@@ -2,45 +2,29 @@
 #define SPHERE_CUH
 
 #include "hittable.cuh"
-#include "material.cuh"
+#include "cuda_error_handle.cuh"
 
 class sphere : public hittable {
 public:
-	__device__ sphere() {}
-	__device__ sphere(vec3 cen, float r, material *m)
-		: center(cen), radius(r), mat_ptr(m) {};
-	__device__ virtual bool hit(const ray& r, float tmin, float tmax, hit_record& rec) const;
-	vec3 center;
+	__host__ __device__ sphere() {}
+	__host__ __device__ sphere(vec3 cen, float r, material *m);
+	__host__ __device__ bool bounding_box(float t0, float t1, aabb& box);
+	__device__ bool hit(const ray& r, float tmin, float tmax, hit_record& rec);
+	//vec3 center;
 	float radius;
-	material *mat_ptr;
-};
+	//material *mat_ptr;
 
-__device__ bool sphere::hit(const ray& r, float t_min, float t_max, hit_record& rec) const {
-	vec3 oc = r.origin() - center;
-	float a = dot(r.direction(), r.direction());
-	float b = dot(oc, r.direction());
-	float c = dot(oc, oc) - radius * radius;
-	float discriminant = b * b - a * c;
-	if (discriminant > 0) {
-		float temp = (-b - sqrt(discriminant)) / a;
-		if (temp < t_max && temp > t_min) {
-			rec.t = temp;
-			rec.p = r.point_at_parameter(rec.t);
-			rec.normal = (rec.p - center) / radius;
-			rec.mat_ptr = mat_ptr;
-			return true;
-		}
-		temp = (-b + sqrt(discriminant)) / a;
-		if (temp < t_max && temp > t_min) {
-			rec.t = temp;
-			rec.p = r.point_at_parameter(rec.t);
-			rec.normal = (rec.p - center) / radius;
-			rec.mat_ptr = mat_ptr;
-			return true;
-		}
+	virtual hittable* copy_to_gpu() const {
+		sphere *device,*tmp;
+		tmp = new sphere();
+		memcpy(tmp, this, sizeof(sphere));
+		tmp->mat_ptr = this->mat_ptr->copy_to_gpu();
+
+		checkCudaErrors(cudaMalloc((void**)&device, sizeof(sphere)));
+		checkCudaErrors(cudaMemcpy(device, tmp, sizeof(sphere), cudaMemcpyHostToDevice));
+
+		return device;
 	}
-	return false;
-}
-
+};
 
 #endif

@@ -60,6 +60,7 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </PostBuildEvent>
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -86,18 +87,32 @@ copy "$(CudaToolkitBinDir)\cudart*.dll" "$(OutDir)"</Command>
     </CudaCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <CudaCompile Include="aabb.cu" />
+    <CudaCompile Include="bvh.cu" />
+    <CudaCompile Include="cuda_error_handle.cu" />
+    <CudaCompile Include="hittable.cu" />
+    <CudaCompile Include="hittable_list.cu" />
     <CudaCompile Include="main.cu" />
+    <CudaCompile Include="material.cu" />
+    <CudaCompile Include="random.cu" />
+    <CudaCompile Include="sphere.cu" />
+    <CudaCompile Include="triangle.cu" />
+    <CudaCompile Include="vec3.cu" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="aabb.cuh" />
+    <ClInclude Include="bvh.cuh" />
     <ClInclude Include="camera.cuh" />
     <ClInclude Include="cuda_error_handle.cuh" />
     <ClInclude Include="hittable.cuh" />
     <ClInclude Include="hittable_list.cuh" />
     <ClInclude Include="material.cuh" />
+    <ClInclude Include="obj_parser.cuh" />
     <ClInclude Include="random.cuh" />
     <ClInclude Include="ray.cuh" />
     <ClInclude Include="render.cuh" />
     <ClInclude Include="sphere.cuh" />
+    <ClInclude Include="triangle.cuh" />
     <ClInclude Include="vec3.cuh" />
     <ClInclude Include="world.cuh" />
   </ItemGroup>
