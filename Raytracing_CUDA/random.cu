@@ -14,18 +14,26 @@ __global__ void init_pixel_random_seed(int max_x, int max_y, curandState *random
 
 //Generate a vector in an unit sphere according to the pixel's random seed
 __device__ vec3 random_in_unit_sphere(curandState *random_seed) {
-	vec3 p;
-	do {
+	//vec3 p;
+	/*do {
 		p = 2.0*vec3(curand_uniform(random_seed), curand_uniform(random_seed), curand_uniform(random_seed)) - vec3(1, 1, 1);
-	} while (p.squared_length() >= 1.0);
-	return p;
+	} while (p.squared_length() >= 1.0);*/
+	float xx = curand_normal(random_seed);
+	float yy = curand_normal(random_seed);
+	float zz = curand_normal(random_seed);
+	float fenmu = sqrt(xx*xx + yy * yy + zz * zz);
+	return vec3(xx/fenmu,yy/fenmu,zz/fenmu);
 }
 
 //Generate a vector in an unit disk according to the pixel's random seed
 __device__ vec3 random_in_unit_disk(curandState *random_seed) {
-	vec3 p;
+	/*vec3 p;
 	do {
 		p = 2.0*vec3(curand_uniform(random_seed), curand_uniform(random_seed), 0.0f) - vec3(1, 1, 0);
 	} while (p.squared_length() >= 1.0);
-	return p;
+	return p;*/
+	float xx = curand_normal(random_seed);
+	float yy = curand_normal(random_seed);
+	float fenmu = sqrt(xx*xx + yy * yy);
+	return vec3(xx / fenmu, yy / fenmu, 0.0f);
 }

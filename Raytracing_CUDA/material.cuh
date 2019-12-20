@@ -58,7 +58,7 @@ public:
 
 class dielectric : public material {
 public:
-	__host__ __device__ dielectric(float ri);
+	__host__ __device__ dielectric(const vec3& a, float ri);
 
 	__device__ bool scatter(const ray& r_in, const hit_record& rec,
 		vec3& attenuation, ray& scattered, curandState *pixel_random_seed);
@@ -71,6 +71,7 @@ public:
 	}
 
 	float ref_idx;
+	vec3 albedo;
 };
 
 #endif // !MATERIAL_CUH

@@ -3,16 +3,21 @@
 #include "aabb.cuh"
 
 __host__ __device__ triangle::triangle(vec3 vertexone, vec3 vertextwo, vec3 vertexthree,
-	vec3 vn1, vec3 vn2, vec3 vn3,
+	//vec3 vn1, vec3 vn2, vec3 vn3,
 	material *mat_ptr) {
 	type = type_triangle;
 
 	v1 = vertexone;
 	v2 = vertextwo;
 	v3 = vertexthree;
-	this->vn1 = vn1;
+	//this->vn1 = cross(v3 - v1,v2-v1);
+	this->vn1 = cross(v2 - v1, v3 - v1);
+	this->vn1 /= this->vn1.length();
+	this->vn2 = this->vn1;
+	this->vn3 = this->vn1;
+	/*this->vn1 = vn1;
 	this->vn2 = vn2;
-	this->vn3 = vn3;
+	this->vn3 = vn3;*/
 	center = (v1 + v2 + v3) / 3;
 	normal = cross(v2 - v1, v3 - v1);
 	this->mat_ptr = mat_ptr;

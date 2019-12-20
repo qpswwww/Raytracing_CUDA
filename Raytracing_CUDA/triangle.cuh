@@ -15,7 +15,7 @@ public:
 	__host__ __device__ triangle() {};
 
 	__host__ __device__ triangle(vec3 vertexone, vec3 vertextwo, vec3 vertexthree,
-		vec3 vn1, vec3 vn2, vec3 vn3,
+		//vec3 vn1, vec3 vn2, vec3 vn3,
 		material *mat_ptr);
 
 	__host__ __device__ bool bounding_box(float t0, float t1, aabb& box);

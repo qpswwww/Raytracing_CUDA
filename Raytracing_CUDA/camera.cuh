@@ -3,6 +3,7 @@
 
 #include "ray.cuh"
 #include "vec3.cuh"
+#include "random.cuh"
 
 #define PI 3.1415926535898
 
@@ -15,7 +16,7 @@ public:
 		origin = vec3(0.0, 0.0, 0.0);
 	}*/
 
-	__device__ camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect,
+	__host__ __device__ camera(vec3 lookfrom, vec3 lookat, vec3 vup, float vfov, float aspect,
 		float aperture, float focus_dist) {
 		lens_radius = aperture / 2;
 		float theta = vfov * PI / 180;

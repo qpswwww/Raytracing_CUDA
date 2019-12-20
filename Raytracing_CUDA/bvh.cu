@@ -5,8 +5,8 @@
 #include "ray.cuh"
 
 #define MAX_LEAF_OBJ 5
-#define MAX_DEPTH 9
-#define MAX_STACK 20
+#define MAX_DEPTH 15
+#define MAX_STACK 100
 
 bvh_node::bvh_node() {
 	type = type_bvh_node;

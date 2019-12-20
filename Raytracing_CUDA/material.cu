@@ -42,7 +42,7 @@ __host__ __device__ lambertian::lambertian(const vec3& a) : albedo(a) {
 		return (dot(scattered.direction(), rec.normal) > 0);
 	}
 
-	__host__ __device__ dielectric::dielectric(float ri) : ref_idx(ri) {
+	__host__ __device__ dielectric::dielectric(const vec3& a, float ri) : albedo(a), ref_idx(ri) {
 		type = type_dielectric;
 	}
 
@@ -51,7 +51,8 @@ __host__ __device__ lambertian::lambertian(const vec3& a) : albedo(a) {
 		vec3 outward_normal;
 		vec3 reflected = reflect(r_in.direction(), rec.normal);
 		float ni_over_nt;
-		attenuation = vec3(1.0, 1.0, 1.0);
+		//attenuation = vec3(1.0, 1.0, 1.0);
+		attenuation = albedo;
 		vec3 refracted;
 
 		float reflect_prob;
